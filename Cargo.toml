@@ -1,0 +1,8 @@
+[package]
+name = "weed_review_scraper"
+version = "0.1.0"
+authors = ["Weston <wez470@gmail.com>"]
+
+[dependencies]
+select = "0.4.2"
+reqwest = "0.8.3"
