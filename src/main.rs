@@ -2,7 +2,7 @@ extern crate select;
 extern crate reqwest;
 
 use select::document::Document;
-use select::predicate::{Class, Name};
+use select::predicate::{Attr, Class, Name};
 
 fn main() {
     allbud(vec!["jesus".to_string(), "og".to_string()])
@@ -29,10 +29,14 @@ fn allbud(search_terms: Vec<String>) {
     });
 
     for url in strain_urls {
-        println!("{}", url);
-//        let strain_resp = reqwest::get(&search_url).unwrap();
-//        assert!(strain_resp.status().is_success());
-//
-//        Document::from_read(search_resp).unwrap().
+        let strain_resp = reqwest::get(&url).unwrap();
+        assert!(strain_resp.status().is_success());
+
+        let doc = Document::from_read(strain_resp).unwrap();
+        let rating = doc.find(Class("rating-num")).next().unwrap();
+        let num_ratings = doc.find(Attr("id", "product-rating-votes")).next().unwrap();
+        let split_url: Vec<&str> = url.split('/').collect();
+        let name = split_url.last().unwrap().replace("-", " ");
+        println!("{}:\trating: {}\tnum_ratings: {}", name, rating.inner_html().trim().clone(), num_ratings.inner_html().trim().clone());
     }
 } 
