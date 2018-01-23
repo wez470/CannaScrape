@@ -37,6 +37,6 @@ fn allbud(search_terms: Vec<String>) {
         let num_ratings = doc.find(Attr("id", "product-rating-votes")).next().unwrap();
         let split_url: Vec<&str> = url.split('/').collect();
         let name = split_url.last().unwrap().replace("-", " ");
-        println!("{}:\trating: {}\tnum_ratings: {}", name, rating.inner_html().trim().clone(), num_ratings.inner_html().trim().clone());
+        println!("{}:\trating: {}\tnum_ratings: {}", name, rating.inner_html().trim(), num_ratings.inner_html().trim());
     }
 } 
