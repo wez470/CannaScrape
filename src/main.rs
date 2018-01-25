@@ -49,10 +49,25 @@ fn leafly(search_terms: Vec<String>) {
     assert!(search_resp.status().is_success());
 
     let doc = Document::from_read(search_resp).unwrap();
-    doc.find(Name("li").descendant(Class("padding-rowItem"))).for_each(|item| {
-        println!("{} {}", item.inner_html(), item.text());
-        println!("******\n******");
-    })
+    let mut names = Vec::new();
+//    let mut num_reviews = Vec::new();
+//    let mut ratings = Vec::new();
+    doc.find(Name("li").descendant(Class("padding-rowItem")).descendant(Class("copy--bold"))).for_each(|item| {
+        let name = item.text().trim().to_lowercase();
+        let mut contains_terms = true;
+        search_terms.iter().for_each(|term| {
+            contains_terms &= name.contains(term);
+        });
+        if contains_terms {
+            names.push(name);
+        }
+    });
+    doc.find(Name("li").descendant(Class("padding-rowItem")).descendant(Class("color--light"))).for_each(|item| {
+        let raw_num_revs = item.text().trim().to_string();
+        let num_revs = raw_num_revs.split_whitespace().next().unwrap().to_string();
+        println!("{}", num_revs);
+        //num_reviews.push(num_revs);
+    });
 
 //    let a_tags = node.find(Name("a"));
 //    let search_strains = a_tags.map(|tag| format!("{}{}", base_url, tag.attr("href").unwrap()));
