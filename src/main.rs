@@ -64,8 +64,9 @@ fn leafly(search_terms: Vec<String>) {
     });
     doc.find(Name("li").descendant(Class("padding-rowItem")).descendant(Class("color--light"))).for_each(|item| {
         let raw_num_revs = item.text().trim().to_string();
-        let num_revs = raw_num_revs.split_whitespace().next().unwrap().to_string();
-        println!("{}", num_revs);
+        let num_revs = raw_num_revs.split_whitespace().next().unwrap().to_string().split_off(1);
+
+        println!("{}", num_revs.to_string());
         //num_reviews.push(num_revs);
     });
 
